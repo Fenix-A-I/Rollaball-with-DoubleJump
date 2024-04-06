@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
 
     private int jumpCounter = 0;
     public float jumpForce = 5;
+    private bool onGround = true;
 
     // Start is called before the first frame update
     void Start()
@@ -46,11 +47,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && jumpCounter < 2)
+        if ((Input.GetKeyDown(KeyCode.Space)) && (onGround || jumpCounter < 2))
         {
             Vector3 jump = new Vector3(0.0f, jumpForce, 0.0f);
             rb.AddForce(jump, ForceMode.Impulse);
             jumpCounter++;
+            onGround = false;
         }
     }
 
@@ -66,7 +68,7 @@ public class PlayerController : MonoBehaviour
         {
             other.gameObject.SetActive(false);
             count = count + 1;
-
+            
             SetCountText();
         }
     }
@@ -76,6 +78,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             jumpCounter = 0;
+            onGround = true;
         }
     }
 }
